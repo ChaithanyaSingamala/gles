@@ -167,7 +167,18 @@ void EGLInterface::Setup()
 		EGL_NONE
 	};
 
+#ifdef EGL_API_FB
+	EGLNativeDisplayType  eglNativeDisplay;
+	eglNativeDisplay = fbGetDisplayByIndex(0);
+
+	// Associate the display with EGL.
+	eglDisplay = eglGetDisplay(eglNativeDisplay);
+	window = fbCreateWindow(eglNativeDisplay, 0, 0, 0, 0);
+#else
 	eglDisplay = eglGetDisplay(display);
+#endif
+
+
 
 	eglInitialize(eglDisplay, &majorVersion, &minorVersion);
 

@@ -6,12 +6,14 @@ SET(CMAKE_INSTALL_PREFIX "install" CACHE PATH "install prefix" FORCE)
 set(NAME "OpenGL")
 
 SET(TARGET_NAME "vc2015-powervrsdk-win32" CACHE STRING "should be set to correct target") 
-set_property(CACHE TARGET_NAME PROPERTY STRINGS "vc2015-powervrsdk-win32;vc2015-powervrsdk-x64")
+set_property(CACHE TARGET_NAME PROPERTY STRINGS "vc2015-powervrsdk-win32;vc2015-powervrsdk-x64;target01;target02")
 
 
 project(${NAME})
 
 set(PATH_TARGET_DIR "target")
+
+include(${PATH_TARGET_DIR}/${TARGET_NAME}/toolchain.cmake)
 
 add_definitions(-DGL_GLEXT_PROTOTYPES)
 
@@ -36,11 +38,7 @@ file(GLOB_RECURSE HPP_FILES
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/gl/*.h
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/test/*.h
 							)
-
-LINK_LIBRARIES( 
-							libEGL 
-							libGLESv2
-						)							
+						
 							
 add_executable(${NAME} ${CPP_FILES} ${HPP_FILES})
 

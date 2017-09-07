@@ -1,9 +1,8 @@
 #pragma once
-#include <cstdarg>
-#include <cstdlib>
-#include <cstdarg>
-#include <cstring>
-#include <cstdio>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string>
+#include <stdio.h>
 #include <vector>
 
 class Options
