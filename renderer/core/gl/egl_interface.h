@@ -2,13 +2,10 @@
 
 #include "../common/interface.h"
 #include "EGL\egl.h"
-#include "GLES3\gl32.h"
+#include "gl\opengl_header.h"
 
 class EGLInterface : public Interface
 {
-	EGLint width = 800;
-	EGLint height = 600;
-
 	EGLNativeDisplayType display = nullptr;
 	EGLNativeWindowType window = nullptr;
 	EGLDisplay eglDisplay = nullptr;

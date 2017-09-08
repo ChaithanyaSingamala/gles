@@ -1,7 +1,6 @@
 #include "glrenderer.h"
 #include "../common/log.h"
 #include "egl_interface.h"
-#include "GLES3\gl32.h"
 #include <sstream>
 
 void GLRenderer::Setup()
@@ -12,7 +11,7 @@ void GLRenderer::Setup()
 	const GLubyte* version = glGetString(GL_VERSION);
 	const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-	GLint major, minor;
+	int major, minor;
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
 
@@ -26,6 +25,8 @@ void GLRenderer::Setup()
 	ss << "\n-------------------------------------------------------------\n";
 	printf("%s", ss.str().c_str());
 
+	glClearColor(1.0, 0.0, 0.0, 1.0);
+
 }
 
 GLRenderer::GLRenderer()
@@ -38,10 +39,18 @@ GLRenderer::GLRenderer()
 GLRenderer::~GLRenderer()
 {
 	Log("Exiting OpenGL renderer...");
+
+}
+
+void GLRenderer::SetClearColor(float red, float green, float blue, float alpha)
+{
+	glClearColor(red, green, blue, alpha);
 }
 
 void GLRenderer::Clear(bool _colorBit, bool _depthBit)
 {
-	glClearColor(1.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	GLbitfield mask = 0;
+	if (_colorBit) mask |= GL_COLOR_BUFFER_BIT;
+	if (_depthBit) mask |= GL_DEPTH_BUFFER_BIT;
+	glClear(mask);
 }

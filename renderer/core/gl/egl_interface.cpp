@@ -151,7 +151,13 @@ void EGLInterface::Setup()
 		EGL_SAMPLE_BUFFERS, 1,
 		EGL_SAMPLES,        2,
 		EGL_SURFACE_TYPE,   EGL_WINDOW_BIT,
+#if EGL_OPENGL_ES3_BIT
 		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+#elif EGL_OPENGL_ES3_BIT_KHR
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR,
+#else
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+#endif
 		EGL_NONE
 	};
 
@@ -162,8 +168,15 @@ void EGLInterface::Setup()
 	EGLint numConfigs, numConfigs0;
 
 	EGLint gl_context_attribs[] = {
+#if EGL_OPENGL_ES3_BIT
 		EGL_CONTEXT_MAJOR_VERSION, 3,
 		EGL_CONTEXT_MINOR_VERSION, 2,
+#elif EGL_OPENGL_ES3_BIT_KHR
+		EGL_CONTEXT_MAJOR_VERSION_KHR, 3,
+		EGL_CONTEXT_MINOR_VERSION_KHR, 2,
+#else
+		EGL_CONTEXT_CLIENT_VERSION, 2,
+#endif
 		EGL_NONE
 	};
 
@@ -195,7 +208,7 @@ void EGLInterface::Setup()
 
 	if (eglWindowSurface == EGL_NO_SURFACE)
 	{
-		Log("%s: eglCreateWindowSurface: %x", __func__, eglGetError());
+		Log("ERROR: %s: eglCreateWindowSurface: %x", __func__, eglGetError());
 	}
 	else
 	{
@@ -206,7 +219,7 @@ void EGLInterface::Setup()
 
 	if (eglContext == EGL_NO_CONTEXT)
 	{
-		Log("%s: eglCreateContext: %d", __func__, eglGetError());
+		Log("ERROR: %s: eglCreateContext: %d", __func__, eglGetError());
 	}
 	else
 	{
@@ -216,7 +229,7 @@ void EGLInterface::Setup()
 	ret = eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
 	if (ret == EGL_FALSE)
 	{
-		Log("%s: eglMakeCurrent: %d", __func__, eglGetError());
+		Log("ERROR: %s: eglMakeCurrent: %d", __func__, eglGetError());
 	}
 	else
 	{
@@ -226,7 +239,7 @@ void EGLInterface::Setup()
 	ret = eglSwapInterval(eglDisplay, 0);
 	if (ret != EGL_TRUE)
 	{
-		Log("%s: eglSwapInterval: %d", __func__, eglGetError());
+		Log("ERROR: %s: eglSwapInterval: %d", __func__, eglGetError());
 	}
 	else
 	{

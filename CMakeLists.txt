@@ -12,11 +12,15 @@ set_property(CACHE TARGET_NAME PROPERTY STRINGS "vc2015-powervrsdk-win32;vc2015-
 project(${NAME})
 
 set(PATH_TARGET_DIR "target")
+set(PATH_ENTERNAL_DIR "external")
 
 include(${PATH_TARGET_DIR}/${TARGET_NAME}/toolchain.cmake)
 
 add_definitions(-DGL_GLEXT_PROTOTYPES)
 
+include_directories(${PATH_ENTERNAL_DIR}/glm)
+include_directories(${PATH_ENTERNAL_DIR}/glm)
+include_directories(./renderer/core/)
 include_directories(${PATH_TARGET_DIR}/${TARGET_NAME}/usr/include)
 
 link_directories(${PATH_TARGET_DIR}/${TARGET_NAME}/usr/lib)
@@ -24,19 +28,24 @@ link_directories(${PATH_TARGET_DIR}/${TARGET_NAME}/usr/lib)
 if(WIN32)
     source_group("common" REGULAR_EXPRESSION "renderer/core/common/*")
     source_group("gl" REGULAR_EXPRESSION "renderer/core/gl/*")
+    source_group("model" REGULAR_EXPRESSION "renderer/core/model/*")
     source_group("test" REGULAR_EXPRESSION "renderer/test/*")
 endif(WIN32)
 
 file(GLOB_RECURSE CPP_FILES 
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/common/*.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/gl/*.cpp
+							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/model/*.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/test/*.cpp
+							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/soil/*.c
 							)
 							
 file(GLOB_RECURSE HPP_FILES 
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/common/*.h
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/gl/*.h
+							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/model/*.h
 							${CMAKE_CURRENT_SOURCE_DIR}/renderer/test/*.h
+							${CMAKE_CURRENT_SOURCE_DIR}/renderer/core/soil/*.h
 							)
 						
 							

@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "../gl/glrenderer.h"
-#include "../gl/egl_interface.h"
+#include "gl/glrenderer.h"
+#include "gl/egl_interface.h"
 #include "log.h"
 #include "options.h"
 #include <string>

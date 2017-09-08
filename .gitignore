@@ -8,3 +8,4 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 /target/target01
+/target/target02
