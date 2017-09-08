@@ -1,7 +1,12 @@
 #include "model.h"
 #include "glm\gtc\matrix_transform.hpp"
 #include "gl\opengl_header.h"
-
+#include "defines.h"
+#include "common\common.h"
+#include "shader.h"
+#include "glm\gtc\type_ptr.hpp"
+#include "camera.h"
+#include "common\common.h"
 
 void Mesh::CreateVAO()
 {
@@ -142,108 +147,120 @@ void Mesh::Render()
 
 Model::Model(std::string _fileName)
 {
-//#ifndef ANDROID_BUILD
-//    Assimp::Importer importer;
-//	const aiScene* scene = importer.ReadFile(_fileName, aiProcess_Triangulate | aiProcess_FlipUVs);
-//	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-//	{
-//		std::string error = importer.GetErrorString();
-//		ASSERT("ERROR::ASSIMP");
-//		return;
-//	}
-//	directory = _fileName.substr(0, _fileName.find_last_of('/'));
-//
-//	ProcessNode(scene->mRootNode, scene);
-//#endif
+#ifdef ASSIMP_ENABLED
+    Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(_fileName, aiProcess_Triangulate | aiProcess_FlipUVs);
+	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+	{
+		std::string error = importer.GetErrorString();
+		ASSERT("ERROR::ASSIMP");
+		return;
+	}
+	directory = _fileName.substr(0, _fileName.find_last_of('/'));
+
+	ShaderAttribInfo infos = {
+		{ "vertexPosition", VERT_POS_LOC },
+		{ "vertexUV", VERT_UV0_LOC },
+		{ "vertexNormal", VERT_NORMAL_LOC },
+	};
+	shader = new Shader(SHADER_RESOURCE("lighting01.vert"), SHADER_RESOURCE("lighting01.frag"));
+	shader->Set();
+	glUniform3fv(shader->GetUniformLocation("lightColor"), 1, value_ptr(glm::vec3(1.0)));
+	glUniform3fv(shader->GetUniformLocation("objectColor"), 1, value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
+
+	ProcessNode(scene->mRootNode, scene);
+
+	shader->Reset();
+
+#endif
 }
-//#ifndef ANDROID_BUILD
-//void Model::ProcessNode(aiNode* node, const aiScene* scene)
-//{
-//	for (unsigned int i = 0; i < node->mNumMeshes; i++)
-//	{
-//		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-//		this->meshes.push_back(ProcessMesh(mesh, scene));
-//	}
-//	for (unsigned int i = 0; i < node->mNumChildren; i++)
-//	{
-//		ProcessNode(node->mChildren[i], scene);
-//	}
-//
-//}
-//
-//Mesh *Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
-//{
-//	std::vector<unsigned short> indices;
-//	//vector<Texture> textures;
-//
-//	int totalVertexLength = 8;
-//	std::vector<float> vertices(mesh->mNumVertices * totalVertexLength);
-//
-//	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-//	{
-//		vertices[0 + i * 8] =  mesh->mVertices[i].x;
-//		vertices[1 + i * 8] = mesh->mVertices[i].y;
-//		vertices[2 + i * 8] = mesh->mVertices[i].z;
-//		// Normals
-//		if (mesh->mNormals)
-//		{
-//			vertices[3 + i * 8] = mesh->mNormals[i].x;
-//			vertices[4 + i * 8] = mesh->mNormals[i].y;
-//			vertices[5 + i * 8] = mesh->mNormals[i].z;
-//		}
-//		else
-//		{
-//			vertices[3 + i * 8] = 0.0f;
-//			vertices[4 + i * 8] = 0.0f;
-//			vertices[5 + i * 8] = 0.0f;
-//		}
-//
-//		if (mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?
-//		{
-//			vertices[6 + i * 8] = mesh->mTextureCoords[0][i].x;
-//			vertices[7 + i * 8] = mesh->mTextureCoords[0][i].y;
-//		}
-//		else
-//		{
-//			vertices[6 + i * 8] = 0.0f;
-//			vertices[7 + i * 8] = 0.0f;
-//		}
-//	}
-//	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-//	{
-//		aiFace face = mesh->mFaces[i];
-//		for (unsigned int j = 0; j < face.mNumIndices; j++)
-//			indices.push_back(face.mIndices[j]);
-//	}
-//
-//	/** /
-//	// Process materials
-//	if (mesh->mMaterialIndex >= 0)
-//	{
-//		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-//		// We assume a convention for sampler names in the shaders. Each diffuse texture should be named
-//		// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-//		// Same applies to other texture as the following list summarizes:
-//		// Diffuse: texture_diffuseN
-//		// Specular: texture_specularN
-//		// Normal: texture_normalN
-//
-//		// 1. Diffuse maps
-//		vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-//		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-//		// 2. Specular maps
-//		vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-//		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-//	}
-//	*/
-//	MeshDataLayout layout;
-//	layout.position = { GL_TRUE, VERT_POS_LOC, 0, 8, 3 };
-//	layout.normal = { GL_TRUE, VERT_NORMAL_LOC, 3, 8, 3 };
-//	layout.uv = { GL_TRUE, VERT_UV0_LOC, 6, 8, 2 };
-//
-//	return new Mesh(vertices, indices, layout);
-//}
-//#endif
+#ifdef ASSIMP_ENABLED
+void Model::ProcessNode(aiNode* node, const aiScene* scene)
+{
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		this->meshes.push_back(ProcessMesh(mesh, scene));
+	}
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		ProcessNode(node->mChildren[i], scene);
+	}
+
+}
+
+Mesh *Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+{
+	std::vector<unsigned short> indices;
+	//vector<Texture> textures;
+
+	int totalVertexLength = 8;
+	std::vector<float> vertices(mesh->mNumVertices * totalVertexLength);
+
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+	{
+		vertices[0 + i * 8] =  mesh->mVertices[i].x;
+		vertices[1 + i * 8] = mesh->mVertices[i].y;
+		vertices[2 + i * 8] = mesh->mVertices[i].z;
+		// Normals
+		if (mesh->mNormals)
+		{
+			vertices[3 + i * 8] = mesh->mNormals[i].x;
+			vertices[4 + i * 8] = mesh->mNormals[i].y;
+			vertices[5 + i * 8] = mesh->mNormals[i].z;
+		}
+		else 
+		{
+			vertices[3 + i * 8] = 0.0f;
+			vertices[4 + i * 8] = 0.0f;
+			vertices[5 + i * 8] = 0.0f;
+		}
+
+		if (mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?
+		{
+			vertices[6 + i * 8] = mesh->mTextureCoords[0][i].x;
+			vertices[7 + i * 8] = mesh->mTextureCoords[0][i].y;
+		}
+		else
+		{
+			vertices[6 + i * 8] = 0.0f;
+			vertices[7 + i * 8] = 0.0f;
+		}
+	}
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; j++)
+			indices.push_back(face.mIndices[j]);
+	}
+
+	/** /
+	// Process materials
+	if (mesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		// We assume a convention for sampler names in the shaders. Each diffuse texture should be named
+		// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
+		// Same applies to other texture as the following list summarizes:
+		// Diffuse: texture_diffuseN
+		// Specular: texture_specularN
+		// Normal: texture_normalN
+
+		// 1. Diffuse maps
+		vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		// 2. Specular maps
+		vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+	}
+	*/
+	MeshDataLayout layout;
+	layout.position = { GL_TRUE, shader->GetAttribLocation(VERT_POS_LOC), 0, 8, 3 };
+	layout.normal = { GL_TRUE, shader->GetAttribLocation(VERT_NORMAL_LOC), 3, 8, 3 };
+	layout.uv = { GL_TRUE, shader->GetAttribLocation(VERT_UV0_LOC), 6, 8, 2 };
+	return new Mesh(vertices, indices, layout);
+}
+#endif
 void Model::SetTransformation(vec3 _pos, vec3 _rot, vec3 _scale)
 {
 	transform = mat4(1);
@@ -281,10 +298,34 @@ void Model::ResetTransfrom()
 	transform = mat4(1);
 }
 
-void Model::Render()
+void Model::BeginRender()
 {
+}
+
+void Model::EndRender()
+{
+}
+
+void Model::Render(Camera *camera)
+{
+	shader->Set();
+
+
+	glUniformMatrix4fv(shader->GetUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(Common::perspectiveMatrix));
+	glUniformMatrix4fv(shader->GetUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(Common::viewMatrix));
+	glUniform3fv(shader->GetUniformLocation("lightPos"), 1, glm::value_ptr(Common::light1Pos));
+
+	{
+		glm::mat3 normalMat = GetTransfrom();
+		normalMat = glm::inverse(normalMat);
+		normalMat = glm::transpose(normalMat);
+		glUniformMatrix3fv(shader->GetUniformLocation("normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMat));
+		glUniformMatrix4fv(shader->GetUniformLocation("model"), 1, GL_FALSE, glm::value_ptr(GetTransfrom()));
+	}
+
 	for (auto mesh : meshes)
 		mesh->Render();
+	shader->Reset();
 }
 
 

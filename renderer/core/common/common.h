@@ -2,12 +2,18 @@
 
 #include <string>
 #include <assert.h>
+#include "glm/glm.hpp"
+
+using namespace glm;
 
 class Common
 {
 public:
 	Common();
 	virtual ~Common();
+	static mat4 perspectiveMatrix;
+	static mat4 viewMatrix;
+	static vec3 light1Pos;
 };
 
 #if 0

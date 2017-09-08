@@ -5,6 +5,10 @@
 #include <fstream>
 #include <algorithm>
 
+vec3 Common::light1Pos = vec3(0);
+mat4 Common::perspectiveMatrix = mat4(1);
+mat4 Common::viewMatrix = mat4(1);
+
 Common::Common()
 {
 }

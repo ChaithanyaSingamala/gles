@@ -14,16 +14,24 @@ project(${NAME})
 set(PATH_TARGET_DIR "target")
 set(PATH_ENTERNAL_DIR "external")
 
+set(ASSIMP_ENABLED 1)
+
+
 include(${PATH_TARGET_DIR}/${TARGET_NAME}/toolchain.cmake)
 
 add_definitions(-DGL_GLEXT_PROTOTYPES)
 
 include_directories(${PATH_ENTERNAL_DIR}/glm)
-include_directories(${PATH_ENTERNAL_DIR}/glm)
+include_directories(${PATH_ENTERNAL_DIR}/assimp)
 include_directories(./renderer/core/)
 include_directories(${PATH_TARGET_DIR}/${TARGET_NAME}/usr/include)
 
 link_directories(${PATH_TARGET_DIR}/${TARGET_NAME}/usr/lib)
+link_directories(${PATH_TARGET_DIR}/${TARGET_NAME}/usr/lib/${CMAKE_BUILD_TYPE})
+
+if(ASSIMP_ENABLED)
+	LINK_LIBRARIES( assimp )	
+endif()
 
 if(WIN32)
     source_group("common" REGULAR_EXPRESSION "renderer/core/common/*")
@@ -50,6 +58,7 @@ file(GLOB_RECURSE HPP_FILES
 						
 							
 add_executable(${NAME} ${CPP_FILES} ${HPP_FILES})
+
 
 
 

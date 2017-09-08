@@ -6,7 +6,10 @@
 #include <EGL/eglext.h>
 #endif
 #include <GLES3/gl3.h>
-//#include <GLES3/gl3ext.h>
+#ifdef ENABLE_GL_EXT
+#include <GLES3/gl3ext.h>
+#endif
+
 #define GLSL_VERSION_STRING		"#version 300 es\n"
 #define GLSL_VERSION			"v300es"
 

@@ -1,11 +1,9 @@
 #pragma once
 
 #include "camera_base.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "camera.h"
 
-
-class OrbitCamera
+class OrbitCamera : public Camera
 {
 	glm::float32 fov = 43.0f;
 	glm::float32 farPlane = 0.1f;
@@ -28,9 +26,9 @@ public:
 	OrbitCamera();
 	virtual ~OrbitCamera();
 
-	virtual glm::mat4 GetPerspectiveMatrix();
+	virtual glm::mat4 GetPerspectiveMatrix() override;
 
-	virtual glm::mat4 GetViewMatrix();
+	virtual glm::mat4 GetViewMatrix() override;
 	virtual void SetOrbitAngle(glm::float32 _angle);
 	virtual void SetOrbitDistance(glm::float32 _distance);
 	virtual void SetOrbitHeight(glm::float32 _height);

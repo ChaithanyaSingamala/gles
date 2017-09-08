@@ -6,11 +6,11 @@
 
 using namespace glm;
 
-//#ifndef ANDROID_BUILD
-//#include "assimp/Importer.hpp"
-//#include "assimp/scene.h"
-//#include "assimp/postprocess.h"
-//#endif
+#ifndef ASSIMP_ENABLED
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#endif
 
 struct VertexAttributeInfo
 {
@@ -38,6 +38,8 @@ public:
 };
 
 class Mesh;
+class Shader;
+class Camera;
 
 class Model
 {
@@ -46,12 +48,14 @@ class Model
 
 	mat4 transform = mat4(1);
 
+	Shader *shader;
+
 public:
 	Model(std::string _fileName);
-//#ifndef ANDROID_BUILD
-//    void ProcessNode(aiNode * node, const aiScene * scene);
-//	Mesh* ProcessMesh(aiMesh * mesh, const aiScene * scene);
-//#endif
+#ifndef ASSIMP_ENABLED
+    void ProcessNode(aiNode * node, const aiScene * scene);
+	Mesh* ProcessMesh(aiMesh * mesh, const aiScene * scene);
+#endif
     virtual ~Model();
 
 	Mesh* GetMesh(int index);
@@ -64,7 +68,9 @@ public:
 	mat4 GetTransfrom();
 	void ResetTransfrom();
 
-	void Render();
+	void BeginRender();
+	void EndRender();
+	void Render(Camera *camera);
 };
 
 class Mesh

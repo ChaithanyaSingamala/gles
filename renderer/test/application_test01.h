@@ -22,6 +22,8 @@ class ApplicationTest01 :public ApplicationBase
 	Shader *shaderForLightSource = nullptr;
 	Texture *texture1 = nullptr;
 
+	Model *model;
+
 	vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 public:
 	ApplicationTest01(Renderer *_renderer);

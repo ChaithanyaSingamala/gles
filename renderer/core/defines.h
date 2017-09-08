@@ -20,3 +20,5 @@
 #ifndef APIENTRYP
 #define APIENTRYP
 #endif
+
+#define ASSIMP_ENABLED	1

@@ -13,6 +13,7 @@ Thanks to https://learnopengl.com
 #include "gl\opengl_header.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "camera.h"
 
 // Default camera values
 const GLfloat YAW = -90.0f;
@@ -22,7 +23,7 @@ const GLfloat SENSITIVTY = 0.15f;
 const GLfloat ZOOM = 43.0f;
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
-class CameraBase
+class CameraBase : public Camera
 {
 public:
 	// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
