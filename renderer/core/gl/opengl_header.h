@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef ANDROID_BUILD
-
+#define ENABLE_ANDROID_INTERFACE
 #else
 #define ENABLE_EGL
 #endif

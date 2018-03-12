@@ -84,7 +84,7 @@ void ApplicationTest01::Render()
 
 	{
 		static float rot = 0.0;
-		rot += 0.0001f * deltaTime;
+		rot += 0.001f * deltaTime;
 		shaderForLightSource->Set();
 		glUniformMatrix4fv(shaderForLightSource->GetUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(Common::perspectiveMatrix));
 		glUniformMatrix4fv(shaderForLightSource->GetUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(Common::viewMatrix));
@@ -144,4 +144,10 @@ void ApplicationTest01::Render()
 	{
 		model->Render(camera);
 	}
+}
+
+void ApplicationTest01::ViewportChanged(int _width, int _height)
+{
+	if(camera)
+		camera->ViewportChanged(_width, _height);
 }

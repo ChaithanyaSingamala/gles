@@ -34,6 +34,7 @@ public:
 	void Init() override;
 	void Update() override {}
 	void Render() override;
+	virtual void ViewportChanged(int _width, int _height) override;
 
 };
 

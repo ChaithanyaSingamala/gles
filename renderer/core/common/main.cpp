@@ -34,6 +34,7 @@ int main(int argc, char **argv)
 	ApplicationBase::RegisterApplications(renderer);
 
 	ApplicationBase::ActiveApplication()->Init();
+	ApplicationBase::ActiveApplication()->ViewportChanged(interfaceI->Width(), interfaceI->Height());
 	bool done = false;
 	while (!done)
 	{

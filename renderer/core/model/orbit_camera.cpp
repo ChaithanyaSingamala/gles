@@ -18,9 +18,8 @@ void OrbitCamera::UpdateViewMatrix()
 
 void OrbitCamera::UpdateProjectionMatrix()
 {
-	int width = 800;
-	int height = 600;
-	projectionMatrix = glm::perspective(glm::radians(fov), width / (float)height, 0.1f, 1000.0f);
+	projectionMatrix = glm::perspective(glm::radians(fov), width / (float)height, nearPlane, farPlane);
+	//projectionMatrix = glm::perspective(glm::radians(fov), width / (float)height, 0.1f, 1000.0f);
 }
 
 OrbitCamera::OrbitCamera()
@@ -71,7 +70,7 @@ void OrbitCamera::Orbit(glm::float32 _speed)
 	UpdateViewMatrix();
 }
 
-void OrbitCamera::SetProjection(glm::float32 _fov, glm::float32 _near, glm::float32 _far, glm::float32 _aspect)
+void OrbitCamera::SetProjection(glm::float32 _fov, glm::float32 _near, glm::float32 _far, glm::float32 _width, glm::float32 _height)
 {
 	if (!_fov)
 		fov = _fov;
@@ -79,8 +78,16 @@ void OrbitCamera::SetProjection(glm::float32 _fov, glm::float32 _near, glm::floa
 		nearPlane = _near;
 	if (!_far)
 		farPlane = _far;
-	if (_aspect)
-		aspect = _aspect;
+	width = _width;
+	height = _height;
+
+	UpdateProjectionMatrix();
+}
+
+void OrbitCamera::ViewportChanged(glm::float32 _width, glm::float32 _height)
+{
+	width = _width;
+	height = _height;
 
 	UpdateProjectionMatrix();
 }

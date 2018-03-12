@@ -17,6 +17,7 @@ public:
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Render() = 0;
+	virtual void ViewportChanged(int _width, int _height) = 0;
 
 	// need to implement by test classes
 	static void RegisterApplications(Renderer *_renderer);

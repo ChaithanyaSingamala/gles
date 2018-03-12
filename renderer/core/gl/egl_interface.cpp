@@ -256,6 +256,8 @@ void EGLInterface::Setup()
 	eglQuerySurface(eglDisplay, eglWindowSurface, EGL_HEIGHT, &height);
 
 	Log("width height %d %d ", width, height);
+
+	
 }
 
 EGLInterface::EGLInterface()

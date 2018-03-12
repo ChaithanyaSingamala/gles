@@ -4,6 +4,7 @@
 #include "gl/glrenderer.h"
 #include "common/application_base.h"
 #include "AndroidHelper.h"
+#include "gl/android_interface.h"
 
 extern "C"
 JNIEXPORT jstring
@@ -17,6 +18,7 @@ Java_gles_opengl_MainActivity_stringFromJNI(
 }
 
 static Renderer *renderer = nullptr;
+static AndroidInterface *androidInterface = nullptr;
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -40,6 +42,10 @@ Java_gles_opengl_MyRenderer_nativeSurfaceChange(
         jclass type,
         jint width,
         jint height) {
+   // androidInterface->Width(width);
+  //  androidInterface->Height(height);
+
+    ApplicationBase::ActiveApplication()->ViewportChanged(width,height);
 
 }
 

@@ -6,9 +6,8 @@
 class OrbitCamera : public Camera
 {
 	glm::float32 fov = 43.0f;
-	glm::float32 farPlane = 0.1f;
-	glm::float32 nearPlane = 100.0f;
-	glm::float32 aspect = 1.0f;
+	glm::float32 farPlane = 100.0f;
+	glm::float32 nearPlane = 0.1f;
 
 	glm::vec3 center = glm::vec3(0.0);
 
@@ -18,6 +17,9 @@ class OrbitCamera : public Camera
 
 	glm::mat4	viewMatrix;
 	glm::mat4	projectionMatrix;
+
+	int width = 800;
+	int height = 600;
 
 	void UpdateViewMatrix();
 	void UpdateProjectionMatrix();
@@ -36,6 +38,8 @@ public:
 
 	virtual void Orbit(glm::float32 _speed);
 
-	virtual void SetProjection(glm::float32 _fov = 0.0f, glm::float32 _near = 0.0f, glm::float32 _far = 0.0f, glm::float32 _aspect = 0.0f);
+	virtual void SetProjection(glm::float32 _fov = 0.0f, glm::float32 _near = 0.0f, glm::float32 _far = 0.0f, glm::float32 _width = 800, glm::float32 _height = 800);
+
+	virtual void ViewportChanged(glm::float32 _width = 800, glm::float32 _height = 800);
 
 };
