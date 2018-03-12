@@ -5,6 +5,7 @@
 #include "options.h"
 #include <string>
 #include "application_base.h"
+#include "interface.h"
 
 int main(int argc, char **argv)
 {
@@ -24,7 +25,9 @@ int main(int argc, char **argv)
 	value = options("-renderer");
 	if(value == "gl")
 	{
-		interfaceI = new EGLInterface();
+#ifdef ENABLE_EGL
+        interfaceI = new EGLInterface();
+#endif
 		renderer = new GLRenderer();
 	}
 

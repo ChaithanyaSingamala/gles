@@ -1,10 +1,21 @@
 #pragma once
 
+#ifdef ANDROID_BUILD
+
+#else
+#define ENABLE_EGL
+#endif
+
+#ifdef ENABLE_EGL
 
 #include <EGL/egl.h>
 #ifdef ENABLE_EGL_EXT
 #include <EGL/eglext.h>
 #endif
+
+#endif
+
+
 #include <GLES3/gl3.h>
 #ifdef ENABLE_GL_EXT
 #include <GLES3/gl3ext.h>

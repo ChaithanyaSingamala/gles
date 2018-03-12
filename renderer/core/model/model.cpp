@@ -145,6 +145,13 @@ void Mesh::Render()
 	UnbindVAO();
 }
 
+Model::Model(Mesh *mesh, Shader *_shader)
+{
+
+	this->meshes.push_back(mesh);
+
+	shader = _shader; 
+}
 Model::Model(std::string _fileName)
 {
 #ifdef ASSIMP_ENABLED

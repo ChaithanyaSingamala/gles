@@ -13,10 +13,11 @@ ApplicationTest02Gears::~ApplicationTest02Gears()
 
 void ApplicationTest02Gears::Init()
 {
-	renderer->SetClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+	renderer->SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void ApplicationTest02Gears::Render()
 {
+	renderer->SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	renderer->Clear();
 }

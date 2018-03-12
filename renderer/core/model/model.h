@@ -51,6 +51,7 @@ class Model
 	Shader *shader;
 
 public:
+	Model(Mesh * mesh, Shader * _shader);
 	Model(std::string _fileName);
 #ifndef ASSIMP_ENABLED
     void ProcessNode(aiNode * node, const aiScene * scene);

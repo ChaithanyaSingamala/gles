@@ -1,4 +1,7 @@
 #include "egl_interface.h"
+
+#ifdef ENABLE_EGL
+
 #include "../common/log.h"
 #include <string>
 #include "../common/options.h"
@@ -275,3 +278,5 @@ void EGLInterface::Update()
 
 	eglSwapBuffers(eglDisplay, eglWindowSurface);
 }
+
+#endif

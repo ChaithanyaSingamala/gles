@@ -24,12 +24,7 @@ void ApplicationTest01::Init()
 	//load texture
 	//texture1 = new Texture("resources/textures/texture_4.png");
 
-	model = new Model("resources/models/nanosuit.obj");
-	model->SetTransformation(
-		vec3(0.0f, -1.5f, 0.0f), //vec3(0.0f, -20.0f, -50.0f),
-		vec3(0.0f, 0.0f, 0.0f),
-		vec3(0.15f, 0.15f, 0.15f)
-		);
+
 
 	//load shaders
 	{
@@ -50,6 +45,17 @@ void ApplicationTest01::Init()
 		shader->Reset();
 	}
 
+#if 0
+	model = new Model("resources/models/nanosuit.obj");
+#else
+	model = new Model(CreateModelCube(shader), shader);
+#endif	
+	model->SetTransformation(
+		vec3(0.0f, 0.0f, 0.0f), //vec3(0.0f, -20.0f, -50.0f),
+		vec3(0.0f, 0.0f, 0.0f),
+		vec3(1.0f, 1.0f, 1.0f)
+	);
+
 	//load models
 	testMesh = CreateModelCube(shader);
 	testPlaneModel = CreateModelPlaneXZ(shader, 5.0f);
@@ -63,18 +69,22 @@ void ApplicationTest01::Init()
 	glEnable(GL_DEPTH_TEST);
 
 	renderer->SetClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+
+	prevTime = currentTimeInMS();
 }
 
 void ApplicationTest01::Render()
 {
+	long deltaTime = currentTimeInMS() - prevTime;
 	renderer->Clear();
+	prevTime = currentTimeInMS();
 
 	Common::perspectiveMatrix = camera->GetPerspectiveMatrix();
 	Common::viewMatrix = camera->GetViewMatrix();
 
 	{
 		static float rot = 0.0;
-		rot += 0.0001f;// *Engine::get()->GetDeltaTime();
+		rot += 0.0001f * deltaTime;
 		shaderForLightSource->Set();
 		glUniformMatrix4fv(shaderForLightSource->GetUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(Common::perspectiveMatrix));
 		glUniformMatrix4fv(shaderForLightSource->GetUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(Common::viewMatrix));

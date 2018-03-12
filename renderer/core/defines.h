@@ -21,4 +21,11 @@
 #define APIENTRYP
 #endif
 
+
+#ifdef ANDROID_BUILD
+
+#else
+
 #define ASSIMP_ENABLED	1
+#endif
+
