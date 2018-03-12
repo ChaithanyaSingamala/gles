@@ -11,7 +11,7 @@ set_property(CACHE TARGET_NAME PROPERTY STRINGS "vc2015-powervrsdk-win32;vc2015-
 
 project(${NAME})
 
-set(PATH_TARGET_DIR "target")
+set(PATH_TARGET_DIR "target" CACHE STRING "should be set to correct target path")
 set(PATH_ENTERNAL_DIR "external")
 
 set(ASSIMP_ENABLED 1)
